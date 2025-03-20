@@ -18,7 +18,7 @@ const RequestTransferred = () => {
         useWebView2={true}
         mixedContentMode={'always'}
         originWhitelist={['https://*', 'wss://*']}
-        source={{uri: 'https://ctynamviet.1erp.vn/'}}
+        source={{uri: 'https://menu.1erp.vn/'}}
       />
     </>
   );
