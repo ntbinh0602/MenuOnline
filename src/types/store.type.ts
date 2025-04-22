@@ -1,4 +1,4 @@
-import { Company } from "./company.type";
+import { Company } from './company.type';
 
 export interface Store {
   id: string;
@@ -11,10 +11,13 @@ export interface Store {
   bankBin?: string;
   bankNumber?: string;
   accountHolder?: string;
+  primaryColor: string;
   deletedAt: string | null;
   createdAt: string;
   updatedAt: string;
   createdBy: string;
   updatedBy: string;
   company: Company;
+  isQRIntegrated: boolean;
+  kitchenDisabled: boolean;
 }

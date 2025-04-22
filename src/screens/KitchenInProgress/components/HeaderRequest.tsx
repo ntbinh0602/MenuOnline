@@ -4,7 +4,7 @@ import {fontSize} from '../../../styles/commonStyles';
 import Icon, {Icons} from '../../../common/icons';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import CustomModal from '../../../components/CustomModal';
-import SelectDropdown from 'react-native-select-dropdown';
+// import SelectDropdown from 'react-native-select-dropdown';
 import {UserStore} from '../../../types/user.type';
 import {roleTypes} from '../../../common/constant';
 import useAuthStore from '../../../store/authStore';
@@ -16,6 +16,9 @@ import {NavigationStackScreens} from '../../../common/enum';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import tw from 'twrnc';
 import {InteractionManager} from 'react-native';
+import SelectDropdown from 'react-native-select-dropdown';
+import {IS_TABLET} from '../../../utils/common';
+import {useTheme} from '../../../provider/ThemeContext';
 
 interface HeaderRequestProps {}
 
@@ -32,13 +35,12 @@ const HeaderRequest: React.FC<HeaderRequestProps> = () => {
   const [openStore, setOpenStore] = useState<boolean>(false);
   const [selectedStore, setSelectedStore] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
+  const {theme, updateTheme} = useTheme();
+
   const getUserStores = (userStores: Array<UserStore>) => {
     return userStores.map(currentUserStore => ({
       value: currentUserStore.storeId,
-      label: `${
-        roleTypes.find(roleType => roleType.value === currentUserStore.role)
-          ?.label || ''
-      } ${currentUserStore.store.name}`,
+      label: currentUserStore.store.name,
     }));
   };
   useEffect(() => {
@@ -66,6 +68,14 @@ const HeaderRequest: React.FC<HeaderRequestProps> = () => {
     setValueRedo(value);
   };
 
+  useEffect(() => {
+    if (currentUser?.currentUserStore?.store?.primaryColor) {
+      updateTheme({
+        primary: currentUser.currentUserStore.store.primaryColor,
+      });
+    }
+  }, [currentUser?.currentUserStore?.store?.primaryColor]);
+
   return (
     <>
       <View style={[styles.rowContainer, {paddingTop: insets.top ? 10 : 5}]}>
@@ -78,10 +88,12 @@ const HeaderRequest: React.FC<HeaderRequestProps> = () => {
               <Icon
                 type="Foundation"
                 name={'filter'}
-                color="#005FAB"
+                color={theme.colors.primary}
                 size={26}
               />
-              <Text style={styles.sortText}>Sắp xếp</Text>
+              <Text style={[styles.sortText, {color: theme.colors.primary}]}>
+                Sắp xếp
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -96,7 +108,7 @@ const HeaderRequest: React.FC<HeaderRequestProps> = () => {
       </View>
       <CustomModal
         visible={openStore}
-        width={'46%'}
+        width={IS_TABLET ? '46%' : '90%'}
         title="Chọn cửa hàng"
         onClose={() => setOpenStore(false)}
         onConfirm={handleChangeStore}
@@ -125,7 +137,7 @@ const HeaderRequest: React.FC<HeaderRequestProps> = () => {
           renderButton={(selectedItem: Option | null, isOpened: boolean) => (
             <View style={styles.dropdownButtonStyle}>
               <Text style={styles.dropdownButtonTxtStyle}>
-                {(selectedItem && selectedItem.label) || 'Chọn cửa hàng'}
+                {(selectedItem && selectedItem?.label) || 'Chọn cửa hàng'}
               </Text>
             </View>
           )}
@@ -184,7 +196,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sortText: {
-    color: '#005FAB',
     fontSize: fontSize.font14,
     fontWeight: '600',
     marginLeft: 10,

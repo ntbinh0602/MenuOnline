@@ -1,14 +1,17 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {CustomButton} from '../../../components/CustomButton';
 import {fontSize} from '../../../styles/commonStyles';
 import Icon from '../../../common/icons';
 import {Notifications} from '../../../types/notification';
+import {generateImageURL} from '../../../utils/utils';
+import {RequestProduct} from '../../../types/request.type';
+import tw from 'twrnc';
 
 interface CardRequestProps {
-  item: Notifications;
-  handleReject: () => void;
-  handleServe: () => void;
+  item: RequestProduct;
+  handleReject?: () => void;
+  handleServe?: () => void;
 }
 
 const CardRequest: React.FC<CardRequestProps> = ({
@@ -17,50 +20,43 @@ const CardRequest: React.FC<CardRequestProps> = ({
   handleServe,
 }) => {
   return (
-    <View style={styles.item}>
-      <View style={styles.flex1}>
-        <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <Text style={styles.headerText}>#1</Text>
-            <Text style={styles.timeText}>9 phút trước</Text>
-          </View>
-          <Text style={styles.tableText}>Tầng 1 - Bàn 1</Text>
-        </View>
-        <View style={styles.content}>
-          <View style={styles.orderInfo}>
-            <Text style={styles.text}>5/10</Text>
-            <View style={styles.orderDetails}>
-              <Text style={styles.text}>{item?.name}</Text>
-              <Text style={styles.noteText}>
-                Ghi chú: Bánh mỳ nướng không muối, không ớt, không hành.
-              </Text>
-            </View>
-          </View>
-          <View style={styles.iconWrapper}>
-            <Icon
-              type="Ionicons"
-              name={'checkmark-circle'}
-              color="#16A34A"
-              size={24}
-            />
-          </View>
-        </View>
+    <View
+      style={{
+        flexDirection: 'row',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        backgroundColor: 'white',
+        borderRadius: 10,
+
+        elevation: 5,
+        marginHorizontal: 10,
+        marginBottom: 10,
+        gap: 10,
+      }}>
+      <View
+        style={tw`rounded-[5px] w-[80px] h-[80px] overflow-hidden bg-red-200 relative`}>
+        <Image
+          style={tw`w-full h-full`}
+          source={{
+            uri: `${generateImageURL(item?.product?.thumbnail)}`,
+          }}
+        />
+        <View style={tw`absolute inset-0 bg-black/20`} />
+
+        <Text
+          style={tw`text-[14px] text-white px-[4px] py-[2px] rounded-[5px] font-medium absolute top-0 right-0 min-w-[50%] text-center z-10`}>
+          {item.completedQuantity || 0} / {item.quantity || 0}
+        </Text>
       </View>
-      <View style={styles.buttonContainer}>
-        <CustomButton
-          buttonStyle={styles.rejectButton}
-          type="danger"
-          textStyle={{fontSize: fontSize.font12}}
-          onPress={handleReject}>
-          Từ chối
-        </CustomButton>
-        <CustomButton
-          buttonStyle={styles.acceptButton}
-          type="primary"
-          textStyle={{fontSize: fontSize.font12}}
-          onPress={handleServe}>
-          <Text>Hoàn tất đơn</Text>
-        </CustomButton>
+      <View style={{justifyContent: 'center'}}>
+        <TouchableOpacity onPress={handleServe}>
+          <Icon type="AntDesign" name="closecircle" color="#005FAB" size={28} />
+        </TouchableOpacity>
       </View>
     </View>
   );

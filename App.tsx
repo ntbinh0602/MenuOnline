@@ -1,23 +1,15 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React, {useState} from 'react';
-
+import React from 'react';
 import MainNavigator from './src/navigation';
 import FlashMessage from 'react-native-flash-message';
 import Colors from './src/utils/colors';
 import DeviceInfo from 'react-native-device-info';
-import RequestTransferred from './src/screens/RequestTransferred';
+import {ThemeProvider} from './src/provider/ThemeContext'; // Change the import to use your custom ThemeProvider
 
 function App(): JSX.Element {
   const IS_TABLET: boolean = DeviceInfo.isTablet();
   return (
-    <>
-      <RequestTransferred />
+    <ThemeProvider>
+      <MainNavigator />
       <FlashMessage
         position="top"
         style={[
@@ -54,7 +46,7 @@ function App(): JSX.Element {
         duration={6000}
         floating={true}
       />
-    </>
+    </ThemeProvider>
   );
 }
 

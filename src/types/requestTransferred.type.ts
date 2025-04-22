@@ -2,6 +2,8 @@ import { Request, RequestProduct, SessionCustomer } from './request.type';
 import { Table } from './table.type';
 
 export interface RequestTransferred {
+  quantity: number;
+  servedQuantity:number;
   id: string;
   createdAt: string;
   type: string;
