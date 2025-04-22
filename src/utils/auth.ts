@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const BASE_URL = 'https://ctynamviet.1erp.vn/be-order/api/v1/'
+export const VITE_MEDIA_SEVER_URL = 'https://ctynamviet.1erp.vn/be-order/media/';
 export const URL_LOGIN = '/auth/login';
 export const URL_CHOOSE_STORE = '/auth/choose-store';
 export const URL_CHANGE_PASSWORD = '/auth/change-password';

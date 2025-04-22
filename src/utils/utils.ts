@@ -4,6 +4,7 @@ import { ErrorResponse } from '../types/utils.type';
 import { RequestCounts } from '../types/request.type';
 import { UserStore } from '../types/user.type';
 import { roleTypes } from '../common/constant';
+import { VITE_MEDIA_SEVER_URL } from './auth';
 
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
@@ -54,3 +55,6 @@ export const getConfirmMessage = ({ SERVED, PENDING, INPROGRESS }: RequestCounts
   }
   return '';
 };
+export const generateImageURL = (url: string | undefined) => {
+  return `${VITE_MEDIA_SEVER_URL}${url}`;
+}

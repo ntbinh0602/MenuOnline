@@ -37,8 +37,6 @@ const ModalReject: React.FC<ModalRejectProps> = ({
 
   const [selectedId, setSelectedId] = useState<string | undefined>();
 
-  console.log('🇻🇳 👉 selectedId', selectedId);
-
   return (
     <CustomModal
       visible={openStore}

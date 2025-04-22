@@ -4,6 +4,8 @@ import {NavigationStackScreens} from '../../common/enum';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../types/rootParam.type';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useAuthStore from '../../store/authStore';
+import {useTheme} from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
@@ -11,6 +13,7 @@ type Props = NativeStackScreenProps<
 >;
 
 const SplashScreen: React.FC<Props> = ({navigation}) => {
+  const {isLoading, currentUser, getCurrentUser} = useAuthStore();
   useEffect(() => {
     const checkAccessToken = async () => {
       const accessToken = await AsyncStorage.getItem('accessToken');
@@ -25,6 +28,9 @@ const SplashScreen: React.FC<Props> = ({navigation}) => {
 
     checkAccessToken();
   }, [navigation]);
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
 
   return (
     <View style={styles.viewStyles}>

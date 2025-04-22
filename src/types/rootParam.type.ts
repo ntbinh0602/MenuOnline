@@ -5,5 +5,5 @@ export type RootStackParamList = {
   [NavigationStackScreens.AuthNavigation]: undefined;
   [NavigationStackScreens.MainNavigation]: undefined;
   [AuthStackScreens.Login]: undefined;
-  [MainStackScreens.RequestTransferred]: undefined;
+  [MainStackScreens.KitchenInProgress]: undefined;
 };

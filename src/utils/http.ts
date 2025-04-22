@@ -70,7 +70,6 @@ export class Http {
         ) {
           const data: any | undefined = error.response?.data;
           const message = data?.message || error.message;
-          console.log(message);
         }
 
         if (isAxiosUnauthorizedError<ErrorResponse<{ name: string; message: string }>>(error)) {

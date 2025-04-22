@@ -1,7 +1,11 @@
-import { io, Socket } from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { io, Socket } from 'socket.io-client';
+import { useEffect } from 'react';
+import type { DependencyList } from 'react'; // Changed to React Native type
+
 let socket: Socket | null = null;
+let listeners: Record<string, Set<Function>> = {};
 
 export const initializeSocket = async (): Promise<Socket> => {
   if (socket) return socket; // Nếu đã có socket thì trả về luôn
@@ -41,7 +45,6 @@ export const initializeSocket = async (): Promise<Socket> => {
   return socket!;
 };
 
-
 export const getSocket = async (): Promise<Socket> => {
   if (socket) {
     return socket;
@@ -50,9 +53,78 @@ export const getSocket = async (): Promise<Socket> => {
   return await initializeSocket();
 };
 
+export const registerSocketListener = async (event: string, callback: Function): Promise<void> => {
+  if (!listeners[event]) {
+    listeners[event] = new Set();
+  }
+  listeners[event].add(callback);
+
+  const socket = await getSocket();
+  socket.on(event, callback as (...args: any[]) => void);
+};
+
+export const unregisterSocketListener = (event: string, callback: Function): void => {
+  if (listeners[event]) {
+    listeners[event].delete(callback);
+    if (socket) {
+      socket.off(event, callback as (...args: any[]) => void);
+    }
+  }
+};
+
 export const disconnectSocket = () => {
   if (socket) {
     socket.disconnect();
-    socket = null;
+    socket = null; // Clear the socket reference
+    console.log('Socket disconnected');
   }
 };
+
+export function useSocketEvent(
+  eventName: string,
+  callback: (...args: any[]) => void,
+  dependencies: DependencyList = []
+) {
+  useEffect(() => {
+    let socketInstance: Socket;
+    
+    const setupSocket = async () => {
+      socketInstance = await getSocket();
+      socketInstance.on(eventName, callback);
+    };
+
+    setupSocket();
+
+    return () => {
+      if (socketInstance) {
+        socketInstance.off(eventName, callback);
+      }
+    };
+  }, dependencies);
+}
+
+export function useMultiSocketEvents(
+  events: { event: string; callback: (...args: any[]) => void }[],
+  dependencies: DependencyList = []
+) {
+  useEffect(() => {
+    let socketInstance: Socket;
+
+    const setupSocket = async () => {
+      socketInstance = await getSocket();
+      events.forEach(({ event, callback }) => {
+        socketInstance.on(event, callback);
+      });
+    };
+
+    setupSocket();
+
+    return () => {
+      if (socketInstance) {
+        events.forEach(({ event, callback }) => {
+          socketInstance.off(event, callback);
+        });
+      }
+    };
+  }, [...dependencies, socket]);
+}

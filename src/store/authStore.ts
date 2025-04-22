@@ -1,10 +1,10 @@
-import { create } from 'zustand';
-import { User } from '../types/user.type';
+
 import { ChooseStorePayLoad, ChooseStoreResponse, LoginPayLoad, LoginResponse } from '../types/auth.type';
+import { User } from '../types/user.type';
+import { create } from 'zustand';
 import http from '../utils/http';
-import { clearLS, URL_CHOOSE_STORE, URL_CURRENT_USER, URL_LOGIN } from '../utils/auth';
 import { showError } from '../utils/error';
-import { showMessage } from 'react-native-flash-message';
+import { URL_CHOOSE_STORE, URL_CURRENT_USER, URL_LOGIN, clearLS } from '../utils/auth';
 
 interface AuthStore {
   currentUser: User | null;
@@ -12,7 +12,6 @@ interface AuthStore {
   login: (payload: LoginPayLoad) => Promise<LoginResponse | undefined>;
   chooseStore: (payload: ChooseStorePayLoad) => Promise<ChooseStoreResponse | undefined>;
   getCurrentUser: () => Promise<User | undefined>;
-
 }
 
 const useAuthStore = create<AuthStore>((set) => ({
@@ -23,7 +22,6 @@ const useAuthStore = create<AuthStore>((set) => ({
     set({ isLoading: true });
     try {
       const response = await http.post<LoginResponse>(URL_LOGIN, data);
-
       set({ isLoading: false });
       return response.data;
     } catch (error) {

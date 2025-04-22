@@ -8,16 +8,32 @@ export interface RequestProduct {
   productId: string;
   productName: string;
   quantity: number;
-  returnedQuantity: number;
+  completedQuantity: number;
   price: number;
   note: string | null;
+  reason: string | null;
   servedQuantity: number | 0;
-  createdAt?: string;
   status: string;
-  type?: string;
-  
+  type: string;
+  request: Request;
+  createdAt: string;
+  updatedAt: string;
+  requestProductHistories?: HistoryRequest[];
+  product?: {
+    thumbnail: string;
+  };
 }
-
+export interface HistoryRequest {
+  id: string;
+  createdAt: string;
+  quantity: number;
+  reason: string | null;
+  status: string;
+  requestProduct: RequestProduct;
+  user: {
+    name: string;
+  };
+}
 export interface RequestBody {
   type: string;
   problems: string | string[];
@@ -36,7 +52,9 @@ export interface Request {
   problems?: string[] | null;
   table?: Table;
   user?: User;
-  rejectReason?: string
+  rejectReason?: string;
+  paymentAmount?: number;
+  confirmedAt?: string;
 }
 
 export interface RequestCounts {
@@ -65,3 +83,68 @@ export type SimplifiedZone = Pick<Zone, 'id' | 'name'>;
 export type SimplifiedTable = Pick<Table, 'id' | 'name' | 'status' | 'zone'> & {
   zone: SimplifiedZone; // Kết nối Zone đã đơn giản hóa
 };
+
+export type TRequestAllTable = {
+  id: string;
+  name: string;
+  zone: TZone;
+  requests: TRequest[];
+};
+
+export type TRequest = {
+  id: string;
+  requestProducts: TRequestProduct[] | [];
+  sessionCustomer: SessionCustomer;
+  note?: string | null;
+  confirmedAt?: string;
+};
+
+export type TRequestProduct = {
+  id: string;
+  productId: string;
+  productName: string;
+  quantity: number;
+  completedQuantity: number;
+  price: number;
+  note: string | null;
+  reason: string | null;
+  servedQuantity: number | 0;
+  createdAt?: string;
+  status: string;
+  requestProductHistories?: HistoryRequest[];
+  product: {
+    thumbnail: string;
+  };
+};
+type TZone = {
+  id: string;
+  name: string;
+};
+export interface RequestProductInfo {
+  id: string;
+  note: string | null;
+  reason: string | null;
+  price: number;
+  status: string;
+  request: Request;
+  quantity: number;
+  createdAt: string;
+  servedQuantity: number;
+  completedQuantity: number;
+  confirmedAt: string;
+  requestProductHistories?: HistoryRequest[];
+  product: {
+    thumbnail: string;
+  };
+}
+
+export interface RequestAllData {
+  productId: string;
+  productName: string;
+  minCreatedAt: string;
+  totalQuantity: string;
+  requestProducts: RequestProductInfo[];
+  product: {
+    thumbnail: string;
+  };
+}
