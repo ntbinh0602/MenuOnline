@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-element-dropdown/src/components/Dropdown/index.tsx b/node_modules/react-native-element-dropdown/src/components/Dropdown/index.tsx
+index 2a73f2f..3261101 100644
+--- a/node_modules/react-native-element-dropdown/src/components/Dropdown/index.tsx
++++ b/node_modules/react-native-element-dropdown/src/components/Dropdown/index.tsx
+@@ -292,7 +292,7 @@ const DropdownComponent = React.forwardRef<IDropdownRef, DropdownProps<any>>(
+               try {
+                 refList.current.scrollToIndex({
+                   index: index,
+-                  animated: false,
++                  animated: true,
+                 });
+               } catch (error) {
+                 console.warn(`scrollToIndex error: ${error}`);

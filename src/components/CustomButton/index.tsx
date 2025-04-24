@@ -8,7 +8,7 @@ import {
   TextStyle,
   ViewStyle,
 } from 'react-native';
-import Colors from '../../utils/colors';
+import {useTheme} from '../../provider/ThemeContext';
 
 interface CustomButtonProps {
   type?: 'primary' | 'default' | 'danger';
@@ -33,11 +33,13 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   color,
   backgroundColor,
 }) => {
+  const {theme} = useTheme();
+
   const combinedButtonStyle: ViewStyle[] = [
     styles.button,
     type === 'primary' && {
-      backgroundColor: backgroundColor || Colors.primary,
-      borderColor: backgroundColor || Colors.primary,
+      backgroundColor: backgroundColor || theme.colors.primary,
+      borderColor: backgroundColor || theme.colors.primary,
     },
     type === 'danger' && {
       backgroundColor: backgroundColor || 'red',
@@ -66,7 +68,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
           color={
             type === 'primary' || type === 'danger'
               ? '#fff'
-              : color || Colors.primary
+              : color || theme.colors.primary
           }
         />
       ) : (

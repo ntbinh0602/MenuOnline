@@ -14,7 +14,6 @@ import {LoginBackground} from '../../assets';
 import {useForm, FormProvider, SubmitHandler} from 'react-hook-form';
 import {CustomTextInput} from '../../components/CustomTextInput';
 import {CustomButton} from '../../components/CustomButton';
-import Colors from '../../utils/colors';
 import useAuthStore from '../../store/authStore';
 import {LoginPayLoad} from '../../types/auth.type';
 import {UserStore} from '../../types/user.type';
@@ -145,7 +144,6 @@ const styles = StyleSheet.create({
   textHeader: {
     textAlign: 'center',
     textTransform: 'uppercase',
-    color: Colors.primary,
     fontWeight: '600',
     fontSize: 28,
     marginBottom: 30,

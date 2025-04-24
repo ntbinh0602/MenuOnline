@@ -13,7 +13,6 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useAuthStore from '../../../store/authStore';
 import CustomModal from '../../../components/CustomModal';
 import tw from 'twrnc';
-import Colors from '../../../utils/colors';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../../types/rootParam.type';
@@ -68,7 +67,7 @@ const LeftRequest: React.FC<Props> = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <CustomModal
+      {/* <CustomModal
         visible={modalLogout}
         width={'38%'}
         title="Đăng xuất"
@@ -99,7 +98,7 @@ const LeftRequest: React.FC<Props> = () => {
         <Text style={tw`text-center text-[#535862]`}>
           Bạn có chắc muốn đăng xuất phiên đăng nhập này không?
         </Text>
-      </CustomModal>
+      </CustomModal> */}
     </View>
   );
 };

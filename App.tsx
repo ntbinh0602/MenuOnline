@@ -1,12 +1,13 @@
 import React from 'react';
 import MainNavigator from './src/navigation';
 import FlashMessage from 'react-native-flash-message';
-import Colors from './src/utils/colors';
 import DeviceInfo from 'react-native-device-info';
-import {ThemeProvider} from './src/provider/ThemeContext'; // Change the import to use your custom ThemeProvider
+import {ThemeProvider, useTheme} from './src/provider/ThemeContext'; // Change the import to use your custom ThemeProvider
 
 function App(): JSX.Element {
   const IS_TABLET: boolean = DeviceInfo.isTablet();
+  const {theme} = useTheme();
+
   return (
     <ThemeProvider>
       <MainNavigator />
@@ -14,7 +15,7 @@ function App(): JSX.Element {
         position="top"
         style={[
           {
-            shadowColor: Colors.danger,
+            shadowColor: theme.colors.danger,
             shadowOffset: {
               width: 0,
               height: 11,

@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import {CustomButton} from '../CustomButton';
 import LoadingLayer from '../Loading/LoadingLayer';
-import Colors from '../../utils/colors';
+import {useTheme} from '../../provider/ThemeContext';
 
 interface CustomModalProps {
   visible?: boolean;
@@ -44,8 +44,9 @@ const CustomModal: React.FC<CustomModalProps> = ({
   confirmVisible = true,
   headerVisible = true,
   buttonAxis = 'vertical',
-  bgColorConfirm = Colors.primary,
+  bgColorConfirm,
 }) => {
+  const {theme} = useTheme();
   const checkButtonAxis = (axis: string) => {
     switch (axis) {
       case 'vertical':
@@ -101,7 +102,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
                   ? styles.buttonW_full
                   : styles.buttonW_fix,
               ])}
-              backgroundColor={bgColorConfirm}
+              backgroundColor={bgColorConfirm || theme.colors.primary}
               type="primary"
               onPress={onConfirm}>
               {confirmText}

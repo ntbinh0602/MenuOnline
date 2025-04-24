@@ -4,7 +4,6 @@ import {fontSize} from '../../../styles/commonStyles';
 import Icon, {Icons} from '../../../common/icons';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import CustomModal from '../../../components/CustomModal';
-// import SelectDropdown from 'react-native-select-dropdown';
 import {UserStore} from '../../../types/user.type';
 import {roleTypes} from '../../../common/constant';
 import useAuthStore from '../../../store/authStore';
@@ -19,6 +18,8 @@ import {InteractionManager} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import {IS_TABLET} from '../../../utils/common';
 import {useTheme} from '../../../provider/ThemeContext';
+import {Dropdown} from 'react-native-element-dropdown';
+import {useKeyboardVisible} from '../../../hooks/useKeyboardVisible';
 
 interface HeaderRequestProps {}
 
@@ -36,6 +37,7 @@ const HeaderRequest: React.FC<HeaderRequestProps> = () => {
   const [selectedStore, setSelectedStore] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
   const {theme, updateTheme} = useTheme();
+  const isKeyboardVisible = useKeyboardVisible();
 
   const getUserStores = (userStores: Array<UserStore>) => {
     return userStores.map(currentUserStore => ({
@@ -48,6 +50,7 @@ const HeaderRequest: React.FC<HeaderRequestProps> = () => {
       setSelectedStore(currentUser?.currentUserStore?.storeId);
     }
   }, [currentUser]);
+
   const handleChangeStore = async () => {
     try {
       const accessToken = await AsyncStorage.getItem('accessToken');
@@ -64,10 +67,14 @@ const HeaderRequest: React.FC<HeaderRequestProps> = () => {
     } catch (error) {}
   };
 
-  const handleChangeRedo = (value: number) => {
-    setValueRedo(value);
+  const renderItem = (item: Option) => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.textItem}>{item.label} 12</Text>
+        {item.value === selectedStore && <Text>123</Text>}
+      </View>
+    );
   };
-
   useEffect(() => {
     if (currentUser?.currentUserStore?.store?.primaryColor) {
       updateTheme({
@@ -110,6 +117,7 @@ const HeaderRequest: React.FC<HeaderRequestProps> = () => {
         visible={openStore}
         width={IS_TABLET ? '46%' : '90%'}
         title="Chọn cửa hàng"
+        contentStyle={{paddingBottom: 120}}
         onClose={() => setOpenStore(false)}
         onConfirm={handleChangeStore}
         isLoading={isLoading}
@@ -126,38 +134,34 @@ const HeaderRequest: React.FC<HeaderRequestProps> = () => {
           </View>
         )}
         buttonAxis="vertical">
-        <SelectDropdown
-          data={getUserStores(currentUser?.userStores || [])} // Kiểm tra giá trị này
-          onSelect={(selectedItem: Option, index: number) => {
-            setSelectedStore(selectedItem.value);
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={getUserStores(currentUser?.userStores || [])}
+          search
+          containerStyle={{marginTop: 4, borderRadius: 10}}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder="Select item"
+          searchPlaceholder="Tìm kiếm cửa hàng"
+          value={selectedStore}
+          onChange={item => {
+            setSelectedStore(item.value);
           }}
-          defaultValue={getUserStores(currentUser?.userStores || []).find(
-            store => store.value === currentUser?.currentUserStore?.storeId,
-          )}
-          renderButton={(selectedItem: Option | null, isOpened: boolean) => (
-            <View style={styles.dropdownButtonStyle}>
-              <Text style={styles.dropdownButtonTxtStyle}>
-                {(selectedItem && selectedItem?.label) || 'Chọn cửa hàng'}
+          renderLeftIcon={() => <Text></Text>}
+          renderItem={renderItem}
+          flatListProps={{
+            ListEmptyComponent: () => (
+              <Text style={{padding: 10, color: 'gray', alignSelf: 'center'}}>
+                Không có dữ liệu
               </Text>
-            </View>
-          )}
-          renderItem={(item: Option, index: number, isSelected: boolean) => (
-            <View
-              style={{
-                ...styles.dropdownItemStyle,
-                ...(isSelected && {backgroundColor: '#D2D9DF'}),
-              }}>
-              <Text style={styles.dropdownItemTxtStyle}>{item.label}</Text>
-            </View>
-          )}
-          showsVerticalScrollIndicator={false}
-          dropdownStyle={styles.dropdownMenuStyle}
+            ),
+          }}
         />
-        {/* <QuantityInput
-          disabled={10 <= valueRedo}
-          value={valueRedo}
-          onChange={value => handleChangeRedo(value)}
-        /> */}
       </CustomModal>
     </>
   );
@@ -255,6 +259,48 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     color: '#151E26',
+  },
+  dropdown: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  item: {
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  textItem: {
+    flex: 1,
+    fontSize: 16,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    borderRadius: 8,
+    fontSize: 16,
   },
 });
 

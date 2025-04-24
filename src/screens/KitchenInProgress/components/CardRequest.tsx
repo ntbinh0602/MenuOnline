@@ -10,14 +10,14 @@ import tw from 'twrnc';
 
 interface CardRequestProps {
   item: RequestProduct;
-  handleReject?: () => void;
-  handleServe?: () => void;
+  onCancel?: () => void;
+  onConfirm?: () => void;
 }
 
 const CardRequest: React.FC<CardRequestProps> = ({
   item,
-  handleReject,
-  handleServe,
+  onCancel,
+  onConfirm,
 }) => {
   return (
     <View
@@ -53,8 +53,17 @@ const CardRequest: React.FC<CardRequestProps> = ({
           {item.completedQuantity || 0} / {item.quantity || 0}
         </Text>
       </View>
-      <View style={{justifyContent: 'center'}}>
-        <TouchableOpacity onPress={handleServe}>
+      <Text style={{alignSelf: 'center'}}>{item?.productName}</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          gap: 20,
+          alignSelf: 'center',
+        }}>
+        <TouchableOpacity onPress={onCancel}>
+          <Icon type="AntDesign" name="closecircle" color="red" size={28} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onConfirm}>
           <Icon type="AntDesign" name="closecircle" color="#005FAB" size={28} />
         </TouchableOpacity>
       </View>

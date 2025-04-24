@@ -3,8 +3,8 @@ import React, {useMemo, useState} from 'react';
 import CustomModal from '../../../components/CustomModal';
 import tw from 'twrnc';
 import Icon from '../../../common/icons';
-import Colors from '../../../utils/colors';
 import {RadioButtonProps, RadioGroup} from 'react-native-radio-buttons-group';
+import {useTheme} from '../../../provider/ThemeContext';
 
 interface ModalRejectProps {
   openStore?: boolean;
@@ -19,6 +19,8 @@ const ModalReject: React.FC<ModalRejectProps> = ({
   onConfirm,
   isLoading = false,
 }) => {
+  const {theme} = useTheme();
+
   const radioButtons: RadioButtonProps[] = useMemo(
     () => [
       {
@@ -44,7 +46,7 @@ const ModalReject: React.FC<ModalRejectProps> = ({
       title="Từ chối"
       onClose={onClose}
       onConfirm={onConfirm}
-      bgColorConfirm={Colors.danger}
+      bgColorConfirm={theme.colors.danger}
       isLoading={isLoading}
       modalIcon={() => (
         <View style={tw`bg-[#F0F9FF] p-2 rounded-[50px]`}>

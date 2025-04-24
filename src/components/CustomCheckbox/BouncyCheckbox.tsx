@@ -9,17 +9,19 @@ import {View, Text, Image, Animated, Pressable} from 'react-native';
 import useBounceAnimation from './hooks/useBounceAnimation';
 import useStateWithCallback from './helpers/useStateWithCallback';
 import styles from './BouncyCheckbox.style';
+import {useTheme} from '../../provider/ThemeContext';
 import {
   AnimationValues,
   BouncyCheckboxHandle,
   BouncyCheckboxProps,
 } from './BouncyCheckbox.type';
-import Colors from '../../utils/colors';
 
 const BouncyCheckbox: React.ForwardRefRenderFunction<
   BouncyCheckboxHandle,
   BouncyCheckboxProps & RefAttributes<BouncyCheckboxHandle>
 > = (props, ref) => {
+  const {theme} = useTheme();
+
   const {
     style,
     iconStyle,
@@ -34,7 +36,7 @@ const BouncyCheckbox: React.ForwardRefRenderFunction<
     size = 20,
     onPress,
     onLongPress,
-    fillColor = Colors.primary || '#ffc484',
+    fillColor = theme.colors.primary,
     ImageComponent = Image,
     unFillColor = 'transparent',
     disableText = false,

@@ -121,12 +121,14 @@ const useRequestProductStore = create<RequestProductStore>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await http.get('/request-product/in-progress', { params });
+      console.log('🇻🇳 👉 response',response)
       set({
         requestsProductInProgress: response.data,
         total: response.data.length,
         isLoading: false
       });
     } catch (error) {
+      console.log('🇻🇳 👉 error',error)
       showError({ error, title: 'Lấy thông tin yêu cầu thất bại' });
       set({ isLoading: false, error: 'Lấy thông tin yêu cầu thất bại' });
       throw error;
@@ -236,6 +238,7 @@ const useRequestProductStore = create<RequestProductStore>((set) => ({
       set({ isLoading: false });
       return response.data;
     } catch (error) {
+      console.log('🇻🇳 👉 error',error)
       showError({ error, title: 'Xác nhận phục vụ món thất bại' });
       set({ isLoading: false, error: 'Xác nhận phục vụ món thất bại' });
       throw error;
