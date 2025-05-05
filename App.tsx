@@ -12,11 +12,12 @@ import FlashMessage from 'react-native-flash-message';
 import Colors from './src/utils/colors';
 import DeviceInfo from 'react-native-device-info';
 import RequestTransferred from './src/screens/RequestTransferred';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 function App(): JSX.Element {
   const IS_TABLET: boolean = DeviceInfo.isTablet();
   return (
-    <>
+    <SafeAreaProvider>
       <RequestTransferred />
       <FlashMessage
         position="top"
@@ -54,7 +55,7 @@ function App(): JSX.Element {
         duration={6000}
         floating={true}
       />
-    </>
+    </SafeAreaProvider>
   );
 }
 

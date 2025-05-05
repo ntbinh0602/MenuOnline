@@ -8,6 +8,9 @@ export const URL_CURRENT_USER = 'auth/current-user';
 export const URL_REFRESH_TOKEN = '/auth/refresh';
 export const URL_CUSTOMER = 'start-order/';
 export const URL_JOINORDER = 'join-order';
+export const LIVE_URL = 'https://menu.1erp.vn/';
+export const TEST_URL = 'https://ctynamviet.1erp.vn/';
+
 
 export const setAccessTokenToLS = async (accessToken: string) => {
   await AsyncStorage.setItem('accessToken', accessToken);
