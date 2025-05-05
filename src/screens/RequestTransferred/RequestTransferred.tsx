@@ -12,6 +12,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import {Alert} from 'react-native';
 import {IS_IOS} from '../../utils/common';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {LIVE_URL, TEST_URL} from '../../utils/auth';
 
 const KitchenInProgress = () => {
   const inset = useSafeAreaInsets();
@@ -98,7 +99,7 @@ const KitchenInProgress = () => {
         useWebView2={true}
         mixedContentMode="always"
         originWhitelist={['https://*', 'wss://*', 'http://*', 'blob:']}
-        source={{uri: 'http://10.24.191.79:8686/'}}
+        source={{uri: LIVE_URL}}
         onMessage={event => {
           const msg = JSON.parse(event.nativeEvent.data);
           if (msg.type === 'DOWNLOAD_FILE') {
