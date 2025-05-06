@@ -87,12 +87,14 @@ const KitchenInProgress = () => {
 
   return (
     <View
-      style={{
-        flex: 1,
-        paddingTop: inset.top,
-        paddingBottom: inset.bottom,
-        backgroundColor: 'black',
-      }}>
+      style={[
+        styles.container,
+        styles.bg_black,
+        {
+          paddingTop: inset.top,
+          paddingBottom: inset.bottom,
+        },
+      ]}>
       <WebView
         ref={webViewRef}
         useWebView2={true}
@@ -106,6 +108,7 @@ const KitchenInProgress = () => {
             handleDownloadFile(url, filename, mimeType);
           }
         }}
+        style={styles.bg_black}
       />
       <KeepAwake />
     </View>
@@ -113,3 +116,12 @@ const KitchenInProgress = () => {
 };
 
 export default KitchenInProgress;
+
+const styles = StyleSheet.create({
+  bg_black: {
+    backgroundColor: 'black',
+  },
+  container: {
+    flex: 1,
+  },
+});
