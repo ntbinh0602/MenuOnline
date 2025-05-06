@@ -1,16 +1,9 @@
 import React, {useRef} from 'react';
-import {
-  Linking,
-  PermissionsAndroid,
-  Platform,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import KeepAwake from '@sayem314/react-native-keep-awake';
 import WebView from 'react-native-webview';
 import RNFetchBlob from 'rn-fetch-blob';
 import {Alert} from 'react-native';
-import {IS_IOS} from '../../utils/common';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {LIVE_URL, TEST_URL} from '../../utils/auth';
 
@@ -93,7 +86,13 @@ const KitchenInProgress = () => {
   };
 
   return (
-    <View style={{flex: 1, paddingTop: inset.top, paddingBottom: inset.bottom}}>
+    <View
+      style={{
+        flex: 1,
+        paddingTop: inset.top,
+        paddingBottom: inset.bottom,
+        backgroundColor: 'black',
+      }}>
       <WebView
         ref={webViewRef}
         useWebView2={true}
@@ -112,9 +111,5 @@ const KitchenInProgress = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  // (giữ nguyên các style bạn đã viết)
-});
 
 export default KitchenInProgress;

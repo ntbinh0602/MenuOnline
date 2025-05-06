@@ -13,11 +13,13 @@ import Colors from './src/utils/colors';
 import DeviceInfo from 'react-native-device-info';
 import RequestTransferred from './src/screens/RequestTransferred';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {StatusBar} from 'react-native';
 
 function App(): JSX.Element {
   const IS_TABLET: boolean = DeviceInfo.isTablet();
   return (
     <SafeAreaProvider>
+      <StatusBar barStyle={'light-content'} />
       <RequestTransferred />
       <FlashMessage
         position="top"
