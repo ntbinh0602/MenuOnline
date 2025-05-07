@@ -121,7 +121,6 @@ const useRequestProductStore = create<RequestProductStore>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await http.get('/request-product/in-progress', { params });
-      console.log('🇻🇳 👉 response',response)
       set({
         requestsProductInProgress: response.data,
         total: response.data.length,
@@ -198,11 +197,13 @@ const useRequestProductStore = create<RequestProductStore>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await http.get('/request-product/history', { params });
+      console.log('🇻🇳 👉 response',response?.request?.responseURL)
       set({
         requestsProductHistory: response.data.data,
         total: response?.data?.totalItems,
         isLoading: false
       });
+      return response.data;
     } catch (error) {
       showError({ error, title: 'Lấy thông tin yêu cầu thất bại' });
       set({ isLoading: false, error: 'Lấy thông tin yêu cầu thất bại' });

@@ -14,7 +14,7 @@ import {
 import ModalServe from '../components/ModalAction';
 import CardRequest from '../components/CardRequest';
 import {ActivityIndicator} from 'react-native';
-import {set} from 'react-native-reanimated';
+import useAudioDebounce from '../../../hooks/useAudioDebounce';
 
 const ProcessingByDish = ({filters}: {filters?: FilterKitchen}) => {
   const [refreshing, setRefreshing] = useState(false);
@@ -39,6 +39,7 @@ const ProcessingByDish = ({filters}: {filters?: FilterKitchen}) => {
         event: SocketEnum.REQUEST_NOTIFY_TRANSFERRED,
         callback: (newRequest: RequestTransferred) => {
           setRequestProductInprogress(prevRequestProducts => {
+            console.log('🇻🇳 👉 run run');
             const newRequestProducts = newRequest.requestProducts.map(item => {
               return {...item, request: newRequest};
             });
@@ -156,7 +157,7 @@ const ProcessingByDish = ({filters}: {filters?: FilterKitchen}) => {
       setRefreshing(false);
     });
   }, [filters]);
-  console.log('🇻🇳 👉 filters', filters);
+
   useEffect(() => {
     setDataChange(dataTemp);
   }, [dataTemp]);
@@ -178,6 +179,7 @@ const ProcessingByDish = ({filters}: {filters?: FilterKitchen}) => {
     );
     setOpenModalServe(false);
   };
+
   return (
     <>
       <View
@@ -210,7 +212,7 @@ const ProcessingByDish = ({filters}: {filters?: FilterKitchen}) => {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
             scrollEventThrottle={250}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item?.id}
           />
         )}
       </View>

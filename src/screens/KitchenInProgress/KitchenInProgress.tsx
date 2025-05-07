@@ -6,9 +6,10 @@ import {
   RefreshControl,
   TextInput,
   Text,
+  TouchableOpacity,
 } from 'react-native';
 import {useMultiSocketEvents} from '../../utils/socket';
-import {SocketEnum} from '../../common/enum';
+import {MainStackScreens, SocketEnum} from '../../common/enum';
 import useRequestProductStore, {
   FilterKitchen,
 } from '../../store/useRequestProductStore';
@@ -26,6 +27,9 @@ import {Table, Zone} from '../../types/table.type';
 import useZoneStore from '../../store/useZoneStore';
 import {Dayjs} from 'dayjs';
 import Icon from '../../common/icons';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../types/rootParam.type';
 
 type FilterValue =
   | string
@@ -36,8 +40,14 @@ type FilterValue =
   | null
   | [Dayjs | null, Dayjs | null];
 
+type NavigationProps = NativeStackNavigationProp<
+  RootStackParamList,
+  MainStackScreens.History
+>;
+
 const KitchenInProgress = () => {
   const insets = useSafeAreaInsets();
+  const navigate = useNavigation();
   const {fetchRequestInProgress} = useRequestProductStore();
   const [searchText, setSearchText] = useState('');
   const debouncedSearchTerm = useDebounce(searchText, 500);
@@ -50,6 +60,7 @@ const KitchenInProgress = () => {
   }, []);
   const [filteredTables, setFilteredTables] = useState<Table[]>([]);
   const [filteredZones, setFilteredZones] = useState<Zone[]>(zones);
+  const navigation = useNavigation<NavigationProps>();
 
   useEffect(() => {
     setFilters(prev => ({
@@ -123,7 +134,6 @@ const KitchenInProgress = () => {
     setFilters(prev => ({...prev, ...newFilters}));
   };
 
-  console.log('🇻🇳 👉 zones', zones);
   return (
     <View
       style={{
@@ -132,7 +142,11 @@ const KitchenInProgress = () => {
         paddingBottom: insets.bottom,
       }}>
       <HeaderRequest />
-      <View style={styles.searchContainer}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(MainStackScreens.History)}>
+        <Text>Lich Su</Text>
+      </TouchableOpacity>
+      {/* <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
           placeholder="Tìm kiếm..."
@@ -228,7 +242,7 @@ const KitchenInProgress = () => {
             }}
           />
         </View>
-      </View>
+      </View> */}
       <ProcessingByDish filters={filters} />
     </View>
   );

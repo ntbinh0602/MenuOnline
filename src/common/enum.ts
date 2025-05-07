@@ -60,7 +60,8 @@ export enum AuthStackScreens{
   Login = "Login"
 }
 export enum MainStackScreens{
-  KitchenInProgress = "KitchenInProgress"
+  KitchenInProgress = "KitchenInProgress",
+  History = "History"
 }
 export enum SocketEnum {
   TABLE_OCCUPIED = 'table.occupied',

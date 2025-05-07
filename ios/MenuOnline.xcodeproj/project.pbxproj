@@ -13,6 +13,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A8EECD012DBA32BF00126C98 /* kitchen.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A8EECD002DBA32BF00126C98 /* kitchen.mp3 */; };
 		FAE0B92C2D67286B005A6686 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = FAE0B92B2D67286B005A6686 /* Fonts */; };
 		FD851BDC06A972E60AEE0DF4 /* libPods-MenuOnline.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B3E647289129DA8FDE36516 /* libPods-MenuOnline.a */; };
 /* End PBXBuildFile section */
@@ -43,6 +44,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MenuOnline/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		86B31E17AC0C0524A2B4C14A /* Pods-MenuOnline.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MenuOnline.release.xcconfig"; path = "Target Support Files/Pods-MenuOnline/Pods-MenuOnline.release.xcconfig"; sourceTree = "<group>"; };
 		8F00D5091F003A7AB54B8357 /* Pods-MenuOnline.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MenuOnline.debug.xcconfig"; path = "Target Support Files/Pods-MenuOnline/Pods-MenuOnline.debug.xcconfig"; sourceTree = "<group>"; };
+		A8EECD002DBA32BF00126C98 /* kitchen.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = kitchen.mp3; path = ../../fe/public/sounds/kitchen.mp3; sourceTree = "<group>"; };
 		CD42C8902BDBCB100036610F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = MenuOnline/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		D555C6F289336B4AB98B7BCC /* libPods-MenuOnline-MenuOnlineTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MenuOnline-MenuOnlineTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -89,6 +91,7 @@
 		13B07FAE1A68108700A75B9A /* MenuOnline */ = {
 			isa = PBXGroup;
 			children = (
+				A8EECD002DBA32BF00126C98 /* kitchen.mp3 */,
 				CD42C8902BDBCB100036610F /* PrivacyInfo.xcprivacy */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -250,6 +253,7 @@
 				FAE0B92C2D67286B005A6686 /* Fonts in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				A8EECD012DBA32BF00126C98 /* kitchen.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

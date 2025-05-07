@@ -6,7 +6,7 @@ interface Theme {
     primary: string;
     secondary: string;
     danger: string;
-    background: string;
+    white: string;
   };
 }
 
@@ -16,7 +16,7 @@ const defaultTheme: Theme = {
     primary: '#007AFF',
     danger: '#FF3B30',
     secondary: '#ccccccc',
-    background: '#FFFFFF',
+    white: '#FFFFFF',
   },
 };
 
