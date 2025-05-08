@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "574044960770",
+    "project_id": "menuonline-7b10b",
+    "storage_bucket": "menuonline-7b10b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574044960770:android:16c1e4fbd336a43dc8cf1b",
+        "android_client_info": {
+          "package_name": "com.menuonline"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_8kQaP4_aW_aA2IN3zFk1KafuyabZHuc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
