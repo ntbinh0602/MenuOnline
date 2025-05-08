@@ -46,9 +46,7 @@ const HeaderRequest: React.FC<HeaderRequestProps> = () => {
     }));
   };
   useEffect(() => {
-    if (currentUser) {
-      setSelectedStore(currentUser?.currentUserStore?.storeId);
-    }
+    setSelectedStore(currentUser?.currentUserStore?.storeId);
   }, [currentUser]);
 
   const handleChangeStore = async () => {

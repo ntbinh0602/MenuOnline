@@ -53,19 +53,31 @@ const CardRequest: React.FC<CardRequestProps> = ({
           {item.completedQuantity || 0} / {item.quantity || 0}
         </Text>
       </View>
-      <Text style={{alignSelf: 'center'}}>{item?.productName}</Text>
       <View
         style={{
-          flexDirection: 'row',
-          gap: 20,
-          alignSelf: 'center',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          gap: 10,
         }}>
-        <TouchableOpacity onPress={onCancel}>
-          <Icon type="AntDesign" name="closecircle" color="red" size={28} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onConfirm}>
-          <Icon type="AntDesign" name="closecircle" color="#005FAB" size={28} />
-        </TouchableOpacity>
+        <Text>{item?.productName}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 20,
+          }}>
+          <TouchableOpacity onPress={onCancel}>
+            <Icon type="AntDesign" name="closecircle" color="red" size={28} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onConfirm}>
+            <Icon
+              type="AntDesign"
+              name="closecircle"
+              color="#005FAB"
+              size={28}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

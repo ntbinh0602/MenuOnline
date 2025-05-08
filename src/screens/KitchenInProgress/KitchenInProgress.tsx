@@ -40,10 +40,7 @@ type FilterValue =
   | null
   | [Dayjs | null, Dayjs | null];
 
-type NavigationProps = NativeStackNavigationProp<
-  RootStackParamList,
-  MainStackScreens.History
->;
+type NavigationProps = NativeStackNavigationProp<RootStackParamList>;
 
 const KitchenInProgress = () => {
   const insets = useSafeAreaInsets();

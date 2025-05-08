@@ -5,6 +5,7 @@ import http from '../utils/http';
 import { showError } from '../utils/error';
 import { Params } from '../types/params.type';
 import { RequestProductStatus } from '../common/enum';
+import { showMessage } from 'react-native-flash-message';
 
 export interface FilterKitchen extends Params {
   search?: string;
@@ -127,7 +128,6 @@ const useRequestProductStore = create<RequestProductStore>((set) => ({
         isLoading: false
       });
     } catch (error) {
-      console.log('🇻🇳 👉 error',error)
       showError({ error, title: 'Lấy thông tin yêu cầu thất bại' });
       set({ isLoading: false, error: 'Lấy thông tin yêu cầu thất bại' });
       throw error;
@@ -197,7 +197,6 @@ const useRequestProductStore = create<RequestProductStore>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await http.get('/request-product/history', { params });
-      console.log('🇻🇳 👉 response',response?.request?.responseURL)
       set({
         requestsProductHistory: response.data.data,
         total: response?.data?.totalItems,
@@ -216,9 +215,11 @@ const useRequestProductStore = create<RequestProductStore>((set) => ({
       const response = await http.put(`/request-product/${isServe ? 'serve' : 'remade'}`, {
         data: data
       });
-      // notification.success({
-      //   message: response?.data?.message
-      // });
+       showMessage({
+        message: 'Thành công',
+        description: response?.data?.message,
+        type: 'success',
+      });
       set({ isLoading: false });
       return response.data;
     } catch (error) {
@@ -239,7 +240,6 @@ const useRequestProductStore = create<RequestProductStore>((set) => ({
       set({ isLoading: false });
       return response.data;
     } catch (error) {
-      console.log('🇻🇳 👉 error',error)
       showError({ error, title: 'Xác nhận phục vụ món thất bại' });
       set({ isLoading: false, error: 'Xác nhận phục vụ món thất bại' });
       throw error;

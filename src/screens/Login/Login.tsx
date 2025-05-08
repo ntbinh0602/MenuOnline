@@ -20,13 +20,17 @@ import {UserStore} from '../../types/user.type';
 import {roleTypes} from '../../common/constant';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../types/rootParam.type';
-import {AuthStackScreens, NavigationStackScreens} from '../../common/enum';
+import {
+  AuthStackScreens,
+  MainStackScreens,
+  NavigationStackScreens,
+} from '../../common/enum';
 import {showMessage} from 'react-native-flash-message';
 
 type Props = NativeStackScreenProps<RootStackParamList, AuthStackScreens.Login>;
 
 const Login: React.FC<Props> = ({navigation}) => {
-  const {isLoading, login, chooseStore} = useAuthStore();
+  const {isLoading, login, chooseStore, getCurrentUser} = useAuthStore();
   const methods = useForm<LoginPayLoad>();
   const height = Dimensions.get('window').height;
   const getUserStores = (userStores: Array<UserStore>) => {
@@ -45,13 +49,14 @@ const Login: React.FC<Props> = ({navigation}) => {
       const userStoreOptions = getUserStores(response?.userStores || []) || [];
       await chooseStore({
         token: response?.verifyToken || '',
-        storeId: userStoreOptions[1].value || '',
+        storeId: userStoreOptions[0].value || '',
       });
       showMessage({
         message: 'Đăng nhập thành công',
         description: 'Chào mừng bạn đến với order tại bàn!',
         type: 'success',
       });
+      getCurrentUser();
       navigation.replace(NavigationStackScreens.MainNavigation);
     } catch (error) {
       console.error(error);

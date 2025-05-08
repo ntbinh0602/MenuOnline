@@ -39,7 +39,6 @@ const ProcessingByDish = ({filters}: {filters?: FilterKitchen}) => {
         event: SocketEnum.REQUEST_NOTIFY_TRANSFERRED,
         callback: (newRequest: RequestTransferred) => {
           setRequestProductInprogress(prevRequestProducts => {
-            console.log('🇻🇳 👉 run run');
             const newRequestProducts = newRequest.requestProducts.map(item => {
               return {...item, request: newRequest};
             });
@@ -181,31 +180,33 @@ const ProcessingByDish = ({filters}: {filters?: FilterKitchen}) => {
   };
 
   return (
-    <>
+    <View style={{flex: 1}}>
       <View
         style={{height: '100%', flex: 1, marginTop: 10, overflow: 'hidden'}}>
         {isLoading && !refreshing && <ActivityIndicator />}
         {!isLoading && (
           <FlatList
             style={{flex: 1, height: '100%'}}
-            {...(IS_TABLET ? {columnWrapperStyle: {gap: 20}} : {})}
-            numColumns={IS_TABLET ? 3 : 1}
+            // {...(IS_TABLET ? {columnWrapperStyle: {gap: 20}} : {})}
+            numColumns={IS_TABLET ? 2 : 1}
             data={requestsProductInProgress}
             renderItem={({item}) => {
               return (
-                <CardRequest
-                  onConfirm={() => {
-                    setActionType('complete');
-                    setOpenModalServe(true);
-                    setDataTemp([item]);
-                  }}
-                  onCancel={() => {
-                    setActionType('cancel');
-                    setOpenModalServe(true);
-                    setDataTemp([item]);
-                  }}
-                  item={item}
-                />
+                <View style={{width: '50%'}}>
+                  <CardRequest
+                    onConfirm={() => {
+                      setActionType('complete');
+                      setOpenModalServe(true);
+                      setDataTemp([item]);
+                    }}
+                    onCancel={() => {
+                      setActionType('cancel');
+                      setOpenModalServe(true);
+                      setDataTemp([item]);
+                    }}
+                    item={item}
+                  />
+                </View>
               );
             }}
             refreshControl={
@@ -227,7 +228,7 @@ const ProcessingByDish = ({filters}: {filters?: FilterKitchen}) => {
           handleConfirmOrCancel(actionType === 'complete' ? true : false)
         }
       />
-    </>
+    </View>
   );
 };
 

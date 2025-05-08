@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonsWrapper: {
-    height: hp(10),
+    height: hp(6),
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 10,

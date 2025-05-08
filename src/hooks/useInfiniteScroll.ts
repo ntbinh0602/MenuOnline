@@ -13,7 +13,7 @@ const useInfiniteScroll = <T extends { id: string }>(
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetchMethod({...filters, page:1, limit: 10});
+      const response = await fetchMethod({...filters, page:1, limit: 12});
       const newData: T[] = response.data;
       setData(newData);
       if(response?.data?.length === 0) {
@@ -36,7 +36,6 @@ const useInfiniteScroll = <T extends { id: string }>(
   }, [filters]);
 
   const handleLoadMore = async () => {
-    console.log('🇻🇳 👉 allLoaded',allLoaded)
     setIsLoadMore(true);
     if (allLoaded ) {
       setIsLoadMore(false);
@@ -47,9 +46,8 @@ const useInfiniteScroll = <T extends { id: string }>(
       const response = await fetchMethod({
         ...filters,
         page,
-        limit: 10,
+        limit: 12,
       });
-      console.log('🇻🇳 👉 response?.data?.length',response?.data?.length)
       if (response?.data?.length === 0) {
         setAllLoaded(true);
       } else {
@@ -82,6 +80,11 @@ const useInfiniteScroll = <T extends { id: string }>(
     setData((prev) => prev.map((item) => (ids.includes(item.id) ? { ...item, ...fieldUpdated } : item)));
   };
 
+  const updateDatas =  (array : any) => {
+    const dataArray = Array.isArray(data) ? data : [];
+      const newArray = [array, ...dataArray];
+      setData(newArray);
+  };
   return {
     data,
     isLoading,
@@ -89,6 +92,7 @@ const useInfiniteScroll = <T extends { id: string }>(
     handleLoadMore,
     removeItems,
     updateItems,
+    updateDatas,
   };
 };
 

@@ -20,6 +20,7 @@ const SplashScreen: React.FC<Props> = ({navigation}) => {
       setTimeout(() => {
         if (accessToken) {
           navigation.replace(NavigationStackScreens.MainNavigation);
+          getCurrentUser();
         } else {
           navigation.replace(NavigationStackScreens.AuthNavigation);
         }
@@ -28,9 +29,6 @@ const SplashScreen: React.FC<Props> = ({navigation}) => {
 
     checkAccessToken();
   }, [navigation]);
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
 
   return (
     <View style={styles.viewStyles}>
