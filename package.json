@@ -23,6 +23,7 @@
     "react-native": "0.71.19",
     "react-native-device-info": "^14.0.2",
     "react-native-flash-message": "^0.4.2",
+    "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "2.16.x",
     "react-native-modal": "^13.0.1",
     "react-native-radio-buttons-group": "^3.1.0",

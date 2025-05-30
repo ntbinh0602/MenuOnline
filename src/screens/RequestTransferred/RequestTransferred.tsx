@@ -1,15 +1,16 @@
 import React, {useRef} from 'react';
-import {Platform, StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View, PermissionsAndroid} from 'react-native';
 import KeepAwake from '@sayem314/react-native-keep-awake';
 import WebView from 'react-native-webview';
 import RNFetchBlob from 'rn-fetch-blob';
 import {Alert} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {LIVE_URL, TEST_URL} from '../../utils/auth';
-
+import {LIVE_URL, TEST_URL, UAT_URL} from '../../utils/auth';
+import RNFS from 'react-native-fs';
 const KitchenInProgress = () => {
   const inset = useSafeAreaInsets();
   const webViewRef = useRef(null);
+
   const handleDownloadFile = async (
     base64Url: string,
     filename: string,
@@ -85,6 +86,46 @@ const KitchenInProgress = () => {
     }
   };
 
+  const handleDownloadFileXlsx = async (
+    url: string,
+    filename: string,
+    mimeType: string,
+  ): Promise<void> => {
+    try {
+      // Định nghĩa đường dẫn lưu file
+      const downloadPath =
+        Platform.OS === 'ios'
+          ? RNFS.DocumentDirectoryPath // Lưu vào Documents trên iOS
+          : RNFS.DownloadDirectoryPath; // Lưu vào Downloads trên Android
+      const filePath = `${downloadPath}/${filename}`;
+
+      // Xin quyền lưu trữ trên Android
+      if (Platform.OS === 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Cần quyền truy cập bộ nhớ',
+            message: 'Ứng dụng cần quyền truy cập bộ nhớ để lưu file',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+          Alert.alert('Lỗi', 'Không có quyền truy cập bộ nhớ');
+          return;
+        }
+      }
+
+      // Kiểm tra xem url có phải base64 không
+      if (url.startsWith('data:')) {
+        const base64Data = url.split(',')[1]; // Lấy phần base64 sau "data:application/...;base64,"
+        await RNFS.writeFile(filePath, base64Data, 'base64');
+        return;
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+    }
+  };
+
   return (
     <View
       style={[
@@ -103,9 +144,12 @@ const KitchenInProgress = () => {
         source={{uri: LIVE_URL}}
         onMessage={event => {
           const msg = JSON.parse(event.nativeEvent.data);
+          const {url, filename, mimeType} = msg.payload;
           if (msg.type === 'DOWNLOAD_FILE') {
-            const {url, filename, mimeType} = msg.payload;
             handleDownloadFile(url, filename, mimeType);
+          }
+          if (msg.type === 'DOWNLOAD_XLSX') {
+            handleDownloadFileXlsx(url, filename, mimeType);
           }
         }}
         style={styles.bg_black}
