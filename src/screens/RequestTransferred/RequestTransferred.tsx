@@ -11,7 +11,6 @@ import WebView from 'react-native-webview';
 import RNFetchBlob from 'rn-fetch-blob';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {LIVE_URL, TEST_URL, UAT_URL} from '../../utils/auth';
-import RNFS from 'react-native-fs';
 const KitchenInProgress = () => {
   const inset = useSafeAreaInsets();
   const webViewRef = useRef(null);
@@ -22,21 +21,6 @@ const KitchenInProgress = () => {
     mimeType: string,
   ) => {
     try {
-      // 1. Xin quyền lưu (Android)
-      // if (Platform.OS === 'android') {
-      //   const granted = await PermissionsAndroid.request(
-      //     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      //     {
-      //       title: 'Cấp quyền lưu file',
-      //       message: 'Ứng dụng cần quyền này để lưu file về máy',
-      //     },
-      //   );
-      //   if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-      //     Alert.alert('Không có quyền', 'Ứng dụng không thể lưu file');
-      //     return;
-      //   }
-      // }
-
       // 2. Xác định extension từ mimeType
       const ext = mimeType.split('/')[1] || 'bin';
       const baseName = filename.includes('.') ? filename : `${filename}.${ext}`;
@@ -51,7 +35,6 @@ const KitchenInProgress = () => {
       }
 
       // 4. Tách phần base64 và ghi ra file
-      //    base64Url dạng "data:application/pdf;base64,JVBERi0xLjcNCi..."
       // Get filename without extension and extension separately
       const fileExt = baseName.includes('.') ? baseName.split('.').pop() : ext;
       const fileNameWithoutExt = baseName.includes('.')
@@ -97,13 +80,6 @@ const KitchenInProgress = () => {
     mimeType: string,
   ): Promise<void> => {
     try {
-      // Định nghĩa đường dẫn lưu file
-      const downloadPath =
-        Platform.OS === 'ios'
-          ? RNFS.DocumentDirectoryPath // Lưu vào Documents trên iOS
-          : RNFS.DownloadDirectoryPath; // Lưu vào Downloads trên Android
-      const filePath = `${downloadPath}/${filename}`;
-
       // Kiểm tra và xin quyền lưu trữ trên Android
       if (Platform.OS === 'android') {
         // Kiểm tra phiên bản Android
@@ -123,35 +99,50 @@ const KitchenInProgress = () => {
             return;
           }
         }
-        // Thêm kiểm tra quyền đọc nếu cần mở file sau này
-        const readGranted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          {
-            title: 'Cần quyền đọc bộ nhớ',
-            message: 'Ứng dụng cần quyền đọc bộ nhớ để truy cập file',
-            buttonPositive: 'OK',
-            buttonNegative: 'Hủy',
-          },
-        );
-        if (readGranted !== PermissionsAndroid.RESULTS.GRANTED) {
-          Alert.alert('Không có quyền', 'Ứng dụng không thể đọc file');
-          return;
-        }
+      }
+      // 2. Xác định extension từ mimeType
+      const ext = mimeType.split('/')[1] || 'bin';
+      const baseName = filename.includes('.') ? filename : `${filename}.${ext}`;
+
+      // 3. Thư mục lưu
+      const baseDir =
+        Platform.OS === 'ios'
+          ? RNFetchBlob.fs.dirs?.DocumentDir // Lưu vào Documents trên iOS
+          : RNFetchBlob.fs.dirs?.DownloadDir; // Lưu vào Downloads trên Android
+
+      // Check and create directory if not exists
+      const exists = await RNFetchBlob.fs.exists(baseDir);
+      if (!exists) {
+        await RNFetchBlob.fs.mkdir(baseDir);
       }
 
-      // Kiểm tra xem url có phải base64 không
-      if (url.startsWith('data:')) {
-        const base64Data = url.split(',')[1]; // Lấy phần base64 sau "data:application/...;base64,"
-        await RNFS.writeFile(filePath, base64Data, 'base64');
-        Alert.alert('Thông báo', 'Tải file thành công');
-        return;
+      // 4. Tách phần base64 và ghi ra file
+      // Get filename without extension and extension separately
+      const fileExt = baseName.includes('.') ? baseName.split('.').pop() : ext;
+      const fileNameWithoutExt = baseName.includes('.')
+        ? baseName.substring(0, baseName.lastIndexOf('.'))
+        : baseName;
+
+      // Find available filename
+      let counter = 0;
+      let finalPath = `${baseDir}/${baseName}`;
+
+      while (await RNFetchBlob.fs.exists(finalPath)) {
+        counter++;
+        finalPath = `${baseDir}/${fileNameWithoutExt} (${counter}).${fileExt}`;
       }
 
-      Alert.alert('Lỗi', 'Định dạng dữ liệu không hợp lệ: Cần chuỗi base64');
-    } catch (error) {
-      console.error('Download error:', error);
-      Alert.alert('Lỗi', 'Không thể lưu file: ' + (error as Error).message);
-    }
+      // Use finalPath instead of filePath
+      const base64Data = url.split(',')[1];
+      await RNFetchBlob.fs
+        .writeFile(finalPath, base64Data, 'base64')
+        .then(() => {
+          Alert.alert('Thông báo', 'Tải file thành công');
+        })
+        .catch(() => {
+          Alert.alert('Lỗi', 'Không thể lưu file');
+        });
+    } catch (error) {}
   };
 
   return (
