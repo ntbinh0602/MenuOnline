@@ -1,9 +1,14 @@
 import React, {useRef} from 'react';
-import {Platform, StyleSheet, View, PermissionsAndroid} from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  View,
+  PermissionsAndroid,
+  Alert,
+} from 'react-native';
 import KeepAwake from '@sayem314/react-native-keep-awake';
 import WebView from 'react-native-webview';
 import RNFetchBlob from 'rn-fetch-blob';
-import {Alert} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {LIVE_URL, TEST_URL, UAT_URL} from '../../utils/auth';
 import RNFS from 'react-native-fs';
@@ -99,18 +104,37 @@ const KitchenInProgress = () => {
           : RNFS.DownloadDirectoryPath; // Lưu vào Downloads trên Android
       const filePath = `${downloadPath}/${filename}`;
 
-      // Xin quyền lưu trữ trên Android
+      // Kiểm tra và xin quyền lưu trữ trên Android
       if (Platform.OS === 'android') {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        // Kiểm tra phiên bản Android
+        const androidVersion = parseInt(Platform.Version.toString(), 10);
+        if (androidVersion < 33) {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+              title: 'Cần quyền truy cập bộ nhớ',
+              message: 'Ứng dụng cần quyền truy cập bộ nhớ để lưu file',
+              buttonPositive: 'OK',
+              buttonNegative: 'Hủy',
+            },
+          );
+          if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+            Alert.alert('Không có quyền', 'Ứng dụng không thể lưu file');
+            return;
+          }
+        }
+        // Thêm kiểm tra quyền đọc nếu cần mở file sau này
+        const readGranted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
           {
-            title: 'Cần quyền truy cập bộ nhớ',
-            message: 'Ứng dụng cần quyền truy cập bộ nhớ để lưu file',
+            title: 'Cần quyền đọc bộ nhớ',
+            message: 'Ứng dụng cần quyền đọc bộ nhớ để truy cập file',
             buttonPositive: 'OK',
+            buttonNegative: 'Hủy',
           },
         );
-        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-          Alert.alert('Lỗi', 'Không có quyền truy cập bộ nhớ');
+        if (readGranted !== PermissionsAndroid.RESULTS.GRANTED) {
+          Alert.alert('Không có quyền', 'Ứng dụng không thể đọc file');
           return;
         }
       }
@@ -119,10 +143,14 @@ const KitchenInProgress = () => {
       if (url.startsWith('data:')) {
         const base64Data = url.split(',')[1]; // Lấy phần base64 sau "data:application/...;base64,"
         await RNFS.writeFile(filePath, base64Data, 'base64');
+        Alert.alert('Thông báo', 'Tải file thành công');
         return;
       }
+
+      Alert.alert('Lỗi', 'Định dạng dữ liệu không hợp lệ: Cần chuỗi base64');
     } catch (error) {
       console.error('Download error:', error);
+      Alert.alert('Lỗi', 'Không thể lưu file: ' + (error as Error).message);
     }
   };
 
@@ -141,7 +169,7 @@ const KitchenInProgress = () => {
         useWebView2={true}
         mixedContentMode="always"
         originWhitelist={['https://*', 'wss://*', 'http://*', 'blob:']}
-        source={{uri: LIVE_URL}}
+        source={{uri: UAT_URL}}
         onMessage={event => {
           const msg = JSON.parse(event.nativeEvent.data);
           const {url, filename, mimeType} = msg.payload;
